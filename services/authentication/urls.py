@@ -15,7 +15,8 @@ from authentication.views import (
     APILoginView,
     APILogoutView,
     APIPasswordResetView,
-    APIPasswordResetConfirmView
+    APIPasswordResetConfirmView,
+    APIUserRegister,
 )
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -73,4 +74,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/',
          APIPasswordResetConfirmView.as_view(),
          name='api_password_reset_confirm'),
+     
+     path('register',
+          APIUserRegister.as_view(),
+          name="api_user_register"),
 ]

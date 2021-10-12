@@ -2,10 +2,11 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.views.generic.edit import FormMixin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import (
     PasswordResetForm
 )
@@ -23,7 +24,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegisterSerializer
 
 logger = logging.getLogger('simple')
 
@@ -56,6 +57,12 @@ class APIMeView(generics.GenericAPIView):
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'no user'}, status=403)
+
+
+class APIUserRegister(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = RegisterSerializer
 
 
 class APILoginView(AuthMixin, generics.GenericAPIView):
